@@ -12,7 +12,7 @@ Um die ReactNative-Applikation auszuführen, das Repository klonen und folgende 
 - Trainingsdaten über die Applikation sammeln
 
 ## Erstellen eines neuen Entscheidungsbaums
-- InfluxDB im R-Programm konfigurieren
+- InfluxDB im R-Skript konfigurieren
 - R-Programm ausführen, um ein neues PMML zu erzeugen
 - PMML in den Ordner `pmml2js_with_compound_v_4_3` als `pmml.xml`kopieren
 - `pmml2js.html` im Browser öffnen (getestet in Safari)
