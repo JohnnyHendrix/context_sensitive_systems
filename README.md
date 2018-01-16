@@ -1,7 +1,5 @@
 # Übung für Kontextsensitive Systeme am KIT SS17
-
-## App
-Repository klonen und folgende Schritte ausführen
+Um die ReactNative-Applikation auszuführen, das Repository klonen und folgende Schritte ausführen:
 
 ## Expo-CLI Installation
 `npm install -g exp` um `exp` global zu installieren.
