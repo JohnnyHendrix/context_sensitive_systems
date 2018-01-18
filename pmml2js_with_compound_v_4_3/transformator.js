@@ -7,7 +7,7 @@ Connect.send(null);
 var pmmlDoc = Connect.responseXML;
 
 // Load xsl file
-let xslPath = "pmml2js_4_3_with_compound_sp.xsl"
+let xslPath = "pmml2js_dt_4_3_with_compound_sp.xsl"
 Connect.open("GET", xslPath, false);
 Connect.setRequestHeader("Content-Type", "text/xml");
 Connect.send(null);
