@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<PMML version="4.3" xmlns="http://www.dmg.org/PMML-4_3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dmg.org/PMML-4_3 http://www.dmg.org/pmml/v4-3/pmml-4-3.xsd">
+ <Header copyright="Copyright (c) 2018 johnny" description="RPart Decision Tree Model">
+  <Extension name="user" value="johnny" extender="Rattle/PMML"/>
+  <Application name="Rattle/PMML" version="1.4"/>
+  <Timestamp>2018-01-17 21:07:20</Timestamp>
+ </Header>
+ <DataDictionary numberOfFields="8">
+  <DataField name="label" optype="categorical" dataType="string">
+   <Value value="gehen"/>
+   <Value value="stehen"/>
+   <Value value="treppe"/>
+  </DataField>
+  <DataField name="user" optype="categorical" dataType="string">
+   <Value value="Kay"/>
+  </DataField>
+  <DataField name="alpha_mean" optype="continuous" dataType="double"/>
+  <DataField name="alpha_sd" optype="continuous" dataType="double"/>
+  <DataField name="beta_mean" optype="continuous" dataType="double"/>
+  <DataField name="beta_sd" optype="continuous" dataType="double"/>
+  <DataField name="gamma_mean" optype="continuous" dataType="double"/>
+  <DataField name="gamma_sd" optype="continuous" dataType="double"/>
+ </DataDictionary>
+ <TreeModel modelName="RPart_Model" functionName="classification" algorithmName="rpart" splitCharacteristic="binarySplit" missingValueStrategy="defaultChild" noTrueChildStrategy="returnLastPrediction">
+  <MiningSchema>
+   <MiningField name="label" usageType="predicted" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="user" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="alpha_mean" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="alpha_sd" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="beta_mean" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="beta_sd" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="gamma_mean" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="gamma_sd" usageType="active" invalidValueTreatment="returnInvalid"/>
+  </MiningSchema>
+  <Output>
+   <OutputField name="Predicted_label" optype="categorical" dataType="string" feature="predictedValue"/>
+   <OutputField name="Probability_gehen" optype="continuous" dataType="double" feature="probability" value="gehen"/>
+   <OutputField name="Probability_stehen" optype="continuous" dataType="double" feature="probability" value="stehen"/>
+   <OutputField name="Probability_treppe" optype="continuous" dataType="double" feature="probability" value="treppe"/>
+  </Output>
+  <Node id="1" score="gehen" recordCount="77" defaultChild="2">
+   <True/>
+   <ScoreDistribution value="gehen" recordCount="34" confidence="0.441558441558442"/>
+   <ScoreDistribution value="stehen" recordCount="24" confidence="0.311688311688312"/>
+   <ScoreDistribution value="treppe" recordCount="19" confidence="0.246753246753247"/>
+   <Node id="2" score="gehen" recordCount="53" defaultChild="4">
+    <CompoundPredicate booleanOperator="surrogate">
+     <SimplePredicate field="alpha_sd" operator="greaterOrEqual" value="0.03471983"/>
+     <SimplePredicate field="beta_mean" operator="greaterOrEqual" value="0.126057326179771"/>
+     <SimplePredicate field="gamma_sd" operator="greaterOrEqual" value="0.0235203583425505"/>
+     <SimplePredicate field="beta_sd" operator="greaterOrEqual" value="0.015061809387618"/>
+     <SimplePredicate field="alpha_mean" operator="greaterOrEqual" value="0.076822843035105"/>
+     <SimplePredicate field="gamma_mean" operator="lessThan" value="0.0155624674457413"/>
+    </CompoundPredicate>
+    <ScoreDistribution value="gehen" recordCount="34" confidence="0.641509433962264"/>
+    <ScoreDistribution value="stehen" recordCount="0" confidence="0"/>
+    <ScoreDistribution value="treppe" recordCount="19" confidence="0.358490566037736"/>
+    <Node id="4" score="gehen" recordCount="46" defaultChild="8">
+     <SimplePredicate field="alpha_mean" operator="lessThan" value="2.349528"/>
+     <ScoreDistribution value="gehen" recordCount="34" confidence="0.739130434782609"/>
+     <ScoreDistribution value="stehen" recordCount="0" confidence="0"/>
+     <ScoreDistribution value="treppe" recordCount="12" confidence="0.260869565217391"/>
+     <Node id="8" score="gehen" recordCount="17">
+      <CompoundPredicate booleanOperator="surrogate">
+       <SimplePredicate field="gamma_sd" operator="greaterOrEqual" value="0.07821505"/>
+       <SimplePredicate field="beta_sd" operator="greaterOrEqual" value="0.104505710793936"/>
+       <SimplePredicate field="gamma_mean" operator="greaterOrEqual" value="0.0502943123883231"/>
+       <SimplePredicate field="alpha_sd" operator="greaterOrEqual" value="0.340041839972901"/>
+       <SimplePredicate field="beta_mean" operator="greaterOrEqual" value="0.465872559355127"/>
+       <SimplePredicate field="alpha_mean" operator="lessThan" value="-1.37468221549171"/>
+      </CompoundPredicate>
+      <ScoreDistribution value="gehen" recordCount="17" confidence="1"/>
+      <ScoreDistribution value="stehen" recordCount="0" confidence="0"/>
+      <ScoreDistribution value="treppe" recordCount="0" confidence="0"/>
+     </Node>
+     <Node id="9" score="gehen" recordCount="29" defaultChild="18">
+      <CompoundPredicate booleanOperator="surrogate">
+       <SimplePredicate field="gamma_sd" operator="lessThan" value="0.07821505"/>
+       <SimplePredicate field="beta_sd" operator="lessThan" value="0.104505710793936"/>
+       <SimplePredicate field="gamma_mean" operator="lessThan" value="0.0502943123883231"/>
+       <SimplePredicate field="alpha_sd" operator="lessThan" value="0.340041839972901"/>
+       <SimplePredicate field="beta_mean" operator="lessThan" value="0.465872559355127"/>
+       <SimplePredicate field="alpha_mean" operator="greaterOrEqual" value="-1.37468221549171"/>
+      </CompoundPredicate>
+      <ScoreDistribution value="gehen" recordCount="17" confidence="0.586206896551724"/>
+      <ScoreDistribution value="stehen" recordCount="0" confidence="0"/>
+      <ScoreDistribution value="treppe" recordCount="12" confidence="0.413793103448276"/>
+      <Node id="18" score="gehen" recordCount="22">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="beta_mean" operator="greaterOrEqual" value="0.3473947"/>
+        <SimplePredicate field="beta_sd" operator="greaterOrEqual" value="0.0359416748454204"/>
+        <SimplePredicate field="alpha_sd" operator="greaterOrEqual" value="0.0844399551719509"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="gehen" recordCount="17" confidence="0.772727272727273"/>
+       <ScoreDistribution value="stehen" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="treppe" recordCount="5" confidence="0.227272727272727"/>
+      </Node>
+      <Node id="19" score="treppe" recordCount="7">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="beta_mean" operator="lessThan" value="0.3473947"/>
+        <SimplePredicate field="beta_sd" operator="lessThan" value="0.0359416748454204"/>
+        <SimplePredicate field="alpha_sd" operator="lessThan" value="0.0844399551719509"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="gehen" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="stehen" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="treppe" recordCount="7" confidence="1"/>
+      </Node>
+     </Node>
+    </Node>
+    <Node id="5" score="treppe" recordCount="7">
+     <SimplePredicate field="alpha_mean" operator="greaterOrEqual" value="2.349528"/>
+     <ScoreDistribution value="gehen" recordCount="0" confidence="0"/>
+     <ScoreDistribution value="stehen" recordCount="0" confidence="0"/>
+     <ScoreDistribution value="treppe" recordCount="7" confidence="1"/>
+    </Node>
+   </Node>
+   <Node id="3" score="stehen" recordCount="24">
+    <CompoundPredicate booleanOperator="surrogate">
+     <SimplePredicate field="alpha_sd" operator="lessThan" value="0.03471983"/>
+     <SimplePredicate field="beta_mean" operator="lessThan" value="0.126057326179771"/>
+     <SimplePredicate field="gamma_sd" operator="lessThan" value="0.0235203583425505"/>
+     <SimplePredicate field="beta_sd" operator="lessThan" value="0.015061809387618"/>
+     <SimplePredicate field="alpha_mean" operator="lessThan" value="0.076822843035105"/>
+     <SimplePredicate field="gamma_mean" operator="greaterOrEqual" value="0.0155624674457413"/>
+    </CompoundPredicate>
+    <ScoreDistribution value="gehen" recordCount="0" confidence="0"/>
+    <ScoreDistribution value="stehen" recordCount="24" confidence="1"/>
+    <ScoreDistribution value="treppe" recordCount="0" confidence="0"/>
+   </Node>
+  </Node>
+ </TreeModel>
+</PMML>

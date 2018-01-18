@@ -20,7 +20,7 @@
 
 	<xsl:template match="pmml:Segment">/**Segment <xsl:value-of select="@id"/>**/<xsl:apply-templates/></xsl:template>
 
-	<xsl:template match="pmml:True">
+	<xsl:template match="pmml:True" mode="particular">
 		true
 	</xsl:template>
 
@@ -34,7 +34,7 @@
 			Array(
 		</xsl:if>
 		new DecisionTree (
-			<xsl:apply-templates select="pmml:True|pmml:CompoundPredicate"/>, <xsl:choose>
+			<xsl:apply-templates select="pmml:True|pmml:CompoundPredicate|pmml:SimplePredicate" mode="particular"/>, <xsl:choose>
 			<xsl:when test="pmml:Node">
 				<xsl:apply-templates select="pmml:Node"/>
 			</xsl:when>
@@ -46,7 +46,7 @@
 		<xsl:if test="position() = last() and position() != 1"><xsl:text>)</xsl:text></xsl:if>
 	</xsl:template>
 
-	<xsl:template match="pmml:CompoundPredicate">
+	<xsl:template match="pmml:CompoundPredicate" mode="particular">
 	        function(observation) { 
 	        	return( <xsl:apply-templates select="pmml:SimplePredicate"/> true);
 	        }
@@ -59,6 +59,15 @@
 					      <xsl:with-param name="operator" select = "@operator" />
 					    </xsl:call-template>
 					   	<xsl:value-of select="@value"/> &amp;&amp;
+					  </xsl:template>
+					  
+					  <xsl:template match="pmml:SimplePredicate" mode="particular">function(observation) { 
+	        	        return observation.<xsl:value-of
+					    select="translate(@field, translate(@field, $vAllowedSymbols, ''), '_')"/>
+					    <xsl:call-template name="operator">
+					      <xsl:with-param name="operator" select = "@operator" />
+					    </xsl:call-template>
+					   	<xsl:value-of select="@value"/>}
 					  </xsl:template>
 
 	<xsl:template name ="operator">

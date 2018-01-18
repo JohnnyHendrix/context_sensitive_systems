@@ -1,5 +1,5 @@
 // load pmml model
-let pmmlPath = "pmml.xml"
+let pmmlPath = "kss.xml"
 var Connect = new XMLHttpRequest();
 Connect.open("GET", pmmlPath, false);
 Connect.setRequestHeader("Content-Type", "text/xml");
@@ -7,7 +7,7 @@ Connect.send(null);
 var pmmlDoc = Connect.responseXML;
 
 // Load xsl file
-let xslPath = "pmml2js_4_3_with_compound.xsl"
+let xslPath = "pmml2js_4_3_with_compound_sp.xsl"
 Connect.open("GET", xslPath, false);
 Connect.setRequestHeader("Content-Type", "text/xml");
 Connect.send(null);
