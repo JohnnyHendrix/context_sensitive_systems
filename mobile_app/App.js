@@ -135,6 +135,10 @@ export default class AccelerometerSensor extends React.Component {
       }
 
       console.log(features);
+
+      let evalContext = this.state.evalContext;
+      evalContext = evalContext == undefined ? "Nicht erkannt" : evalContext
+      console.log("=> " + evalContext)
       let context = decisionTree.evaluate(features).result
       this.setState({evalContext: context, evalPoints: point, collectPoints: []})
     }
@@ -171,7 +175,6 @@ export default class AccelerometerSensor extends React.Component {
 
     let evalContext = this.state.evalContext;
     evalContext = evalContext == undefined ? "Nicht erkannt" : evalContext
-    console.log("=> " + evalContext)
     let classifierName = decisionTree.name;
 
     return (
