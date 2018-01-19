@@ -6,8 +6,9 @@ library(caret)
 library(zoo)
 library(foreach)
 library(ggvis)
+library(AppliedPredictiveModeling)
 
-###########################  STEP 1 - GET DATA AND PREPROCESSING ###########################
+###########################  STEP 1 - DATA PREPROCESSING ###########################
 
 # create influx connection object
 con <- influxdbr2::influx_connection(host = "138.68.73.47",
@@ -15,18 +16,29 @@ con <- influxdbr2::influx_connection(host = "138.68.73.47",
                                      user = "kss",
                                      pass = "kss_ss17")
 
-# create new database
-# influxdbr2::create_database(con = con, db = "kss")
-
-# Select all from document kss_kay and group by context and user id
-# result <- influx_query_xts(con, db="kss",query="SELECT * FROM kss_kay GROUP BY context, user_id")
-
 # select FileScanner values from kss_kay and do not return xts
 dataset = influxdbr2::influx_select(con = con,
-                                      db = "kss",
-                                      value = "*",
-                                      from = "kss_kay",
-                                      return_xts = TRUE)
+                                    db = "kss",
+                                    value = "*",
+                                    from = "kss_riedel",
+                                    return_xts = TRUE)
+
+dataset = data.frame(dataset)
+# Peek at the data for good measure
+head(dataset)
+
+# get the dimension of the dataset to check
+dim(dataset)
+
+dataset = dataset[, c(1,2,4,3,5,6,7,8)]
+dataset = dataset[,4:8]
+dataset$context = factor(dataset$context, levels = c('gehen', 'stehen', 'treppe'), labels = c(1,2,3))
+
+# Feature Scaling
+#train[,3:5] = scale(train[,3:5], scale = TRUE)
+#test[,3:5] = scale(test[,3:5], scale = TRUE)
+
+###########################  STEP 2 - SLIDING WINDOW WITH MEAN AND SD ###########################
 
 # Funktion zur Berechnung von Features mit Sliding Window
 calc_features<- function(data,columns,features,width,by){
@@ -40,39 +52,33 @@ calc_features<- function(data,columns,features,width,by){
   return(x)  
 }
 
-dataset = data.frame(dataset)
-str(dataset)
-# Peek at the data for good measure
-head(dataset)
-
-# catch all unqiue activities in our case 'gehen', 'stehen', 'treppe'
-
-# cor(dataset[dataset$context==context[1],1:3])
-
-# get the dimension of the dataset to check
-dim(dataset)
-
-
-###########################  STEP 2 - SLIDING WINDOW WITH MEAN AND SD ###########################
-
-activities = c("gehen", "stehen", "treppe")
-sensors = c("alpha", "beta", "gamma")
+activities = levels(dataset$context)
+sensors = c("x", "y", "z")
 users = unique(dataset$user_id)
-users = c("Kay")
-fun=c("mean","sd")
-w = 40
+users = c("Johnny")
+w = 20
 users
 data=foreach(u=users,.combine=rbind)%:%
   foreach(a=activities,.combine=rbind)%do%
   {
     d = filter(dataset, context == a & user_id == u)
-    t=calc_features(d,sensors,fun,w,w/2)
+    t=calc_features(d,sensors,"var",w,w/2)
     l=data.frame(d[seq(w-1,nrow(d),w/2),"context"],rep(u,length.out=nrow(t)))
-    colnames(l) = c("label","user")
+    colnames(l) = c("context","user_id")
     cbind(l,t)
     return(cbind(l,t))
     
   }
+dataset = data
+dataset = dataset[,c(1,3,4,5)]
+
+# Split Data into training set and test set
+library(caTools)
+set.seed(123)
+
+split = sample.split(dataset$context, SplitRatio = 2/3)
+train = subset(dataset, split == TRUE)
+test = subset(dataset, split == FALSE)
 
 library(pmml)
 library(rpart)
@@ -80,18 +86,18 @@ head(data)
 my.rpart <- rpart(label ~ ., data=data)
 my.rpart
 pmml(my.rpart)
-saveXML(pmml(my.rpart), file = "kss.xml")
-
+saveXML(pmml(my.rpart), file = "kss_var.xml")
+dataset
 ###########################  STEP 3 - CREATE VALIDATION SET ###########################
 
 # Create a list of 80% of the rows in the original dataset we can use for training
 validation_index<-createDataPartition(dataset$context, p =.8, list = FALSE, times = 1)
 
 # Select 20% of the data for validation
-test<-dataset[-validation_index, ]
+#test<-dataset[-validation_index, ]
 
 # Use the remaining 80% of data to train and test the models
-train<-dataset[validation_index, ]
+#train<-dataset[validation_index, ]
 
 ###########################  STEP 4 - SUMMARIZE DATASET ###########################
 
@@ -101,7 +107,7 @@ dim(train)
 
 # TODO DIM SPlit vorher nachher = 0.8
 # set the context column as type 'factor' to get later all levels
-train$context <- as.factor(train$context)
+
 
 # List types for each attribute
 sapply(train,class)
@@ -122,15 +128,15 @@ summary(train)
 ###########################  STEP 5 - VIZUALIZATION ###########################
 
 # Split input and output x = alpha, beta, gamma, x, y, z
-x<-train[,1:6]
+x<-train[,2:4]
 
 # y = context
-y<-train[ ,7]
+y<-train[ ,1]
 
 plot(y)
 # Boxplot for each attribute on one image
-par(mfrow=c(1,6))
-for(i in 1:6) {
+par(mfrow=c(2,3))
+for(i in 2:3) {
   boxplot(x[,i], main=names(train)[i])
 }
 
@@ -140,11 +146,18 @@ library(ggplot2)
 
 train %>% ggplot(aes(x= y)) + geom_bar() +labs(y = "Context")
 
-# scatterplot matrix
-featurePlot(x=x, y=y, plot="ellipse")
+transparentTheme(trans = .4)
+library(caret)
 
 # scatterplot matrix
 featurePlot(x=x, y=y, plot="pairs")
+
+# scatterplot matrix
+featurePlot(x = x, 
+            y = y, 
+            plot = "ellipse",
+            ## Add a key at the top
+            auto.key = list(columns = 3))
 
 # Density plots for each attribute by species class value
 scales<-list(x = list(relation = "free"), y = list(relation = "free"))
@@ -187,9 +200,9 @@ dotplot(results)
 # Summarize Best Model
 print(fit.rf)
 
-
 ###########################  STEP 7 - PREDICTIONS ###########################
 
 # Estimate skill of KNN on the validation dataset
 predictions<-predict(fit.rf, test)
 confusionMatrix(predictions, test$context)
+
