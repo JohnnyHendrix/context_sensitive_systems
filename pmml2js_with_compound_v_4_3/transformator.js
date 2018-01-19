@@ -1,5 +1,5 @@
 // load pmml model
-let pmmlPath = "kss.xml"
+let pmmlPath = "kss_var.xml"
 var Connect = new XMLHttpRequest();
 Connect.open("GET", pmmlPath, false);
 Connect.setRequestHeader("Content-Type", "text/xml");

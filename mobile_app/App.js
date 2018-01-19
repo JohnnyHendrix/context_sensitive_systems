@@ -11,8 +11,8 @@ const timer = require('react-native-timer');
 
 
 Telemetry.config({
-  influxUrl: '',
-  basicAuth: '',
+  influxUrl: 'http://138.68.73.47:8086/write?db=kss',
+  basicAuth: 'kss:kss_ss17',
   sendInterval: 1, // Time window in seconds for batching events
 
   log: (message) => console.log(message),
@@ -74,7 +74,7 @@ export default class AccelerometerSensor extends React.Component {
     let { x, y, z } = this.state.accelerationData;
     let {alpha, beta, gamma } = this.state.rotationData;
     Telemetry.point(
-      "kss_kay",
+      "kss_riedel",
       { x: x, y: y, z: z, alpha: alpha, beta: beta, gamma: gamma},
       {context: this.state.action, user_id: this.state.name === "" ? this.state.user_id : this.state.name}
     );
@@ -98,36 +98,40 @@ export default class AccelerometerSensor extends React.Component {
     let collectPoints = this.state.collectPoints;
     collectPoints.push(point);
     if (collectPoints.length == 20) {
-      // sd & mean
-      console.log("reached");
+      // sd & mean & variance
       /*let sd_x  = StatisticalFunctions.standardDeviation(collectPoints.map(point => point.x))
       let sd_y  = StatisticalFunctions.standardDeviation(collectPoints.map(point => point.y))
       let sd_z  = StatisticalFunctions.standardDeviation(collectPoints.map(point => point.z))
       let mean_x  = StatisticalFunctions.mean(collectPoints.map(point => point.x))
       let mean_y  = StatisticalFunctions.mean(collectPoints.map(point => point.y))
       let mean_z  = StatisticalFunctions.mean(collectPoints.map(point => point.z))*/
+      let var_x  = StatisticalFunctions.variance(collectPoints.map(point => point.x))
+      let var_y  = StatisticalFunctions.variance(collectPoints.map(point => point.y))
+      let var_z  = StatisticalFunctions.variance(collectPoints.map(point => point.z))
 
-      let sd_a  = StatisticalFunctions.standardDeviation(collectPoints.map(point => point.alpha))
+      /*let sd_a  = StatisticalFunctions.standardDeviation(collectPoints.map(point => point.alpha))
       let sd_b  = StatisticalFunctions.standardDeviation(collectPoints.map(point => point.beta))
       let sd_c  = StatisticalFunctions.standardDeviation(collectPoints.map(point => point.gamma))
       let mean_a  = StatisticalFunctions.mean(collectPoints.map(point => point.alpha))
       let mean_b  = StatisticalFunctions.mean(collectPoints.map(point => point.beta))
-      let mean_c  = StatisticalFunctions.mean(collectPoints.map(point => point.gamma))
+      let mean_c  = StatisticalFunctions.mean(collectPoints.map(point => point.gamma))*/
 
-      console.log(collectPoints.map(point => point.alpha))
       let features = {
-        alpha_sd: sd_a,
+        /*alpha_sd: sd_a,
         beta_sd: sd_b,
         gamma_sd: sd_c,
         alpha_mean: mean_a,
         beta_mean: mean_b,
         gamma_mean: mean_c,
-        /*x_sd: sd_x,
+        x_sd: sd_x,
         y_sd: sd_y,
         z_sd: sd_z,
         x_mean: mean_x,
         y_mean: mean_y,
         z_mean: mean_z*/
+        x_var: var_x,
+        y_var: var_y,
+        z_var: var_z,
       }
 
       console.log(features);
@@ -167,6 +171,7 @@ export default class AccelerometerSensor extends React.Component {
 
     let evalContext = this.state.evalContext;
     evalContext = evalContext == undefined ? "Nicht erkannt" : evalContext
+    console.log("=> " + evalContext)
     let classifierName = decisionTree.name;
 
     return (
