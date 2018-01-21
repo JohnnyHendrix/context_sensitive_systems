@@ -74,7 +74,7 @@ export default class AccelerometerSensor extends React.Component {
     let { x, y, z } = this.state.accelerationData;
     let {alpha, beta, gamma } = this.state.rotationData;
     Telemetry.point(
-      "kss_riedel",
+      "kss_riedel_test",
       { x: x, y: y, z: z, alpha: alpha, beta: beta, gamma: gamma},
       {context: this.state.action, user_id: this.state.name === "" ? this.state.user_id : this.state.name}
     );

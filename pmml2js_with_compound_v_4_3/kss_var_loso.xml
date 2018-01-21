@@ -1,0 +1,398 @@
+<?xml version="1.0"?>
+<PMML version="4.3" xmlns="http://www.dmg.org/PMML-4_3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dmg.org/PMML-4_3 http://www.dmg.org/pmml/v4-3/pmml-4-3.xsd">
+ <Header copyright="Copyright (c) 2018 kay_meth" description="RPart Decision Tree Model">
+  <Extension name="user" value="kay_meth" extender="Rattle/PMML"/>
+  <Application name="Rattle/PMML" version="1.4"/>
+  <Timestamp>2018-01-21 21:43:55</Timestamp>
+ </Header>
+ <DataDictionary numberOfFields="4">
+  <DataField name=".outcome" optype="categorical" dataType="string">
+   <Value value="1"/>
+   <Value value="2"/>
+   <Value value="3"/>
+  </DataField>
+  <DataField name="x_var" optype="continuous" dataType="double"/>
+  <DataField name="y_var" optype="continuous" dataType="double"/>
+  <DataField name="z_var" optype="continuous" dataType="double"/>
+ </DataDictionary>
+ <TreeModel modelName="RPart_Model" functionName="classification" algorithmName="rpart" splitCharacteristic="binarySplit" missingValueStrategy="defaultChild" noTrueChildStrategy="returnLastPrediction">
+  <MiningSchema>
+   <MiningField name=".outcome" usageType="predicted" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="x_var" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="y_var" usageType="active" invalidValueTreatment="returnInvalid"/>
+   <MiningField name="z_var" usageType="active" invalidValueTreatment="returnInvalid"/>
+  </MiningSchema>
+  <Output>
+   <OutputField name="Predicted_.outcome" optype="categorical" dataType="string" feature="predictedValue"/>
+   <OutputField name="Probability_1" optype="continuous" dataType="double" feature="probability" value="1"/>
+   <OutputField name="Probability_2" optype="continuous" dataType="double" feature="probability" value="2"/>
+   <OutputField name="Probability_3" optype="continuous" dataType="double" feature="probability" value="3"/>
+  </Output>
+  <Node id="1" score="3" recordCount="1089" defaultChild="3">
+   <True/>
+   <ScoreDistribution value="1" recordCount="358" confidence="0.328741965105601"/>
+   <ScoreDistribution value="2" recordCount="337" confidence="0.309458218549128"/>
+   <ScoreDistribution value="3" recordCount="394" confidence="0.361799816345271"/>
+   <Node id="2" score="2" recordCount="327">
+    <CompoundPredicate booleanOperator="surrogate">
+     <SimplePredicate field="y_var" operator="lessThan" value="0.1029296"/>
+     <SimplePredicate field="z_var" operator="lessThan" value="0.420771528488261"/>
+     <SimplePredicate field="x_var" operator="lessThan" value="0.168528528874078"/>
+    </CompoundPredicate>
+    <ScoreDistribution value="1" recordCount="0" confidence="0"/>
+    <ScoreDistribution value="2" recordCount="327" confidence="1"/>
+    <ScoreDistribution value="3" recordCount="0" confidence="0"/>
+   </Node>
+   <Node id="3" score="3" recordCount="762" defaultChild="6">
+    <CompoundPredicate booleanOperator="surrogate">
+     <SimplePredicate field="y_var" operator="greaterOrEqual" value="0.1029296"/>
+     <SimplePredicate field="z_var" operator="greaterOrEqual" value="0.420771528488261"/>
+     <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.168528528874078"/>
+    </CompoundPredicate>
+    <ScoreDistribution value="1" recordCount="358" confidence="0.469816272965879"/>
+    <ScoreDistribution value="2" recordCount="10" confidence="0.0131233595800525"/>
+    <ScoreDistribution value="3" recordCount="394" confidence="0.517060367454068"/>
+    <Node id="6" score="1" recordCount="384" defaultChild="12">
+     <CompoundPredicate booleanOperator="surrogate">
+      <SimplePredicate field="z_var" operator="lessThan" value="5.861938"/>
+      <SimplePredicate field="y_var" operator="lessThan" value="0.917248761094469"/>
+      <SimplePredicate field="x_var" operator="lessThan" value="1.10473956664052"/>
+     </CompoundPredicate>
+     <ScoreDistribution value="1" recordCount="329" confidence="0.856770833333333"/>
+     <ScoreDistribution value="2" recordCount="10" confidence="0.0260416666666667"/>
+     <ScoreDistribution value="3" recordCount="45" confidence="0.1171875"/>
+     <Node id="12" score="1" recordCount="349" defaultChild="24">
+      <CompoundPredicate booleanOperator="surrogate">
+       <SimplePredicate field="y_var" operator="lessThan" value="6.698406"/>
+       <SimplePredicate field="x_var" operator="lessThan" value="14.1679615871693"/>
+      </CompoundPredicate>
+      <ScoreDistribution value="1" recordCount="318" confidence="0.911174785100287"/>
+      <ScoreDistribution value="2" recordCount="10" confidence="0.0286532951289398"/>
+      <ScoreDistribution value="3" recordCount="21" confidence="0.0601719197707736"/>
+      <Node id="24" score="1" recordCount="285" defaultChild="49">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="z_var" operator="greaterOrEqual" value="1.434801"/>
+        <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.198268295549786"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="1" recordCount="264" confidence="0.926315789473684"/>
+       <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="3" recordCount="21" confidence="0.0736842105263158"/>
+       <Node id="48" score="1" recordCount="106">
+        <CompoundPredicate booleanOperator="surrogate">
+         <SimplePredicate field="x_var" operator="greaterOrEqual" value="1.121318"/>
+         <SimplePredicate field="y_var" operator="greaterOrEqual" value="1.10993271792992"/>
+         <SimplePredicate field="z_var" operator="greaterOrEqual" value="5.7587326148684"/>
+        </CompoundPredicate>
+        <ScoreDistribution value="1" recordCount="105" confidence="0.990566037735849"/>
+        <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+        <ScoreDistribution value="3" recordCount="1" confidence="0.00943396226415094"/>
+       </Node>
+       <Node id="49" score="1" recordCount="179" defaultChild="99">
+        <CompoundPredicate booleanOperator="surrogate">
+         <SimplePredicate field="x_var" operator="lessThan" value="1.121318"/>
+         <SimplePredicate field="y_var" operator="lessThan" value="1.10993271792992"/>
+         <SimplePredicate field="z_var" operator="lessThan" value="5.7587326148684"/>
+        </CompoundPredicate>
+        <ScoreDistribution value="1" recordCount="159" confidence="0.888268156424581"/>
+        <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+        <ScoreDistribution value="3" recordCount="20" confidence="0.111731843575419"/>
+        <Node id="98" score="1" recordCount="81">
+         <CompoundPredicate booleanOperator="surrogate">
+          <SimplePredicate field="y_var" operator="lessThan" value="0.3521763"/>
+          <SimplePredicate field="z_var" operator="lessThan" value="3.12888774693017"/>
+          <SimplePredicate field="x_var" operator="lessThan" value="0.239459705295495"/>
+         </CompoundPredicate>
+         <ScoreDistribution value="1" recordCount="79" confidence="0.975308641975309"/>
+         <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+         <ScoreDistribution value="3" recordCount="2" confidence="0.0246913580246914"/>
+        </Node>
+        <Node id="99" score="1" recordCount="98" defaultChild="198">
+         <CompoundPredicate booleanOperator="surrogate">
+          <SimplePredicate field="y_var" operator="greaterOrEqual" value="0.3521763"/>
+          <SimplePredicate field="z_var" operator="greaterOrEqual" value="3.12888774693017"/>
+          <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.239459705295495"/>
+         </CompoundPredicate>
+         <ScoreDistribution value="1" recordCount="80" confidence="0.816326530612245"/>
+         <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+         <ScoreDistribution value="3" recordCount="18" confidence="0.183673469387755"/>
+         <Node id="198" score="1" recordCount="86" defaultChild="397">
+          <SimplePredicate field="z_var" operator="lessThan" value="4.689934"/>
+          <ScoreDistribution value="1" recordCount="74" confidence="0.86046511627907"/>
+          <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+          <ScoreDistribution value="3" recordCount="12" confidence="0.13953488372093"/>
+          <Node id="396" score="1" recordCount="47">
+           <CompoundPredicate booleanOperator="surrogate">
+            <SimplePredicate field="x_var" operator="lessThan" value="0.4355855"/>
+            <SimplePredicate field="z_var" operator="lessThan" value="2.89359387942982"/>
+            <SimplePredicate field="y_var" operator="lessThan" value="1.26498605571654"/>
+           </CompoundPredicate>
+           <ScoreDistribution value="1" recordCount="45" confidence="0.957446808510638"/>
+           <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+           <ScoreDistribution value="3" recordCount="2" confidence="0.0425531914893617"/>
+          </Node>
+          <Node id="397" score="1" recordCount="39" defaultChild="795">
+           <CompoundPredicate booleanOperator="surrogate">
+            <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.4355855"/>
+            <SimplePredicate field="z_var" operator="greaterOrEqual" value="2.89359387942982"/>
+            <SimplePredicate field="y_var" operator="greaterOrEqual" value="1.26498605571654"/>
+           </CompoundPredicate>
+           <ScoreDistribution value="1" recordCount="29" confidence="0.743589743589744"/>
+           <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+           <ScoreDistribution value="3" recordCount="10" confidence="0.256410256410256"/>
+           <Node id="794" score="1" recordCount="11">
+            <CompoundPredicate booleanOperator="surrogate">
+             <SimplePredicate field="z_var" operator="greaterOrEqual" value="3.704214"/>
+             <SimplePredicate field="x_var" operator="greaterOrEqual" value="1.06089123498811"/>
+            </CompoundPredicate>
+            <ScoreDistribution value="1" recordCount="11" confidence="1"/>
+            <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+            <ScoreDistribution value="3" recordCount="0" confidence="0"/>
+           </Node>
+           <Node id="795" score="1" recordCount="28" defaultChild="1591">
+            <CompoundPredicate booleanOperator="surrogate">
+             <SimplePredicate field="z_var" operator="lessThan" value="3.704214"/>
+             <SimplePredicate field="x_var" operator="lessThan" value="1.06089123498811"/>
+            </CompoundPredicate>
+            <ScoreDistribution value="1" recordCount="18" confidence="0.642857142857143"/>
+            <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+            <ScoreDistribution value="3" recordCount="10" confidence="0.357142857142857"/>
+            <Node id="1590" score="1" recordCount="21">
+             <CompoundPredicate booleanOperator="surrogate">
+              <SimplePredicate field="y_var" operator="greaterOrEqual" value="0.4158848"/>
+              <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.487767634429584"/>
+             </CompoundPredicate>
+             <ScoreDistribution value="1" recordCount="15" confidence="0.714285714285714"/>
+             <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+             <ScoreDistribution value="3" recordCount="6" confidence="0.285714285714286"/>
+            </Node>
+            <Node id="1591" score="3" recordCount="7">
+             <CompoundPredicate booleanOperator="surrogate">
+              <SimplePredicate field="y_var" operator="lessThan" value="0.4158848"/>
+              <SimplePredicate field="x_var" operator="lessThan" value="0.487767634429584"/>
+             </CompoundPredicate>
+             <ScoreDistribution value="1" recordCount="3" confidence="0.428571428571429"/>
+             <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+             <ScoreDistribution value="3" recordCount="4" confidence="0.571428571428571"/>
+            </Node>
+           </Node>
+          </Node>
+         </Node>
+         <Node id="199" score="1" recordCount="12">
+          <SimplePredicate field="z_var" operator="greaterOrEqual" value="4.689934"/>
+          <ScoreDistribution value="1" recordCount="6" confidence="0.5"/>
+          <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+          <ScoreDistribution value="3" recordCount="6" confidence="0.5"/>
+         </Node>
+        </Node>
+       </Node>
+      </Node>
+      <Node id="25" score="1" recordCount="64" defaultChild="51">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="z_var" operator="lessThan" value="1.434801"/>
+        <SimplePredicate field="x_var" operator="lessThan" value="0.198268295549786"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="1" recordCount="54" confidence="0.84375"/>
+       <ScoreDistribution value="2" recordCount="10" confidence="0.15625"/>
+       <ScoreDistribution value="3" recordCount="0" confidence="0"/>
+       <Node id="50" score="1" recordCount="30">
+        <CompoundPredicate booleanOperator="surrogate">
+         <SimplePredicate field="y_var" operator="greaterOrEqual" value="0.3961757"/>
+         <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.51683237011011"/>
+         <SimplePredicate field="z_var" operator="lessThan" value="1.18656873288817"/>
+        </CompoundPredicate>
+        <ScoreDistribution value="1" recordCount="30" confidence="1"/>
+        <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+        <ScoreDistribution value="3" recordCount="0" confidence="0"/>
+       </Node>
+       <Node id="51" score="1" recordCount="34" defaultChild="103">
+        <CompoundPredicate booleanOperator="surrogate">
+         <SimplePredicate field="y_var" operator="lessThan" value="0.3961757"/>
+         <SimplePredicate field="x_var" operator="lessThan" value="0.51683237011011"/>
+         <SimplePredicate field="z_var" operator="greaterOrEqual" value="1.18656873288817"/>
+        </CompoundPredicate>
+        <ScoreDistribution value="1" recordCount="24" confidence="0.705882352941177"/>
+        <ScoreDistribution value="2" recordCount="10" confidence="0.294117647058824"/>
+        <ScoreDistribution value="3" recordCount="0" confidence="0"/>
+        <Node id="102" score="1" recordCount="19">
+         <CompoundPredicate booleanOperator="surrogate">
+          <SimplePredicate field="z_var" operator="greaterOrEqual" value="1.109813"/>
+          <SimplePredicate field="y_var" operator="greaterOrEqual" value="0.220089525077121"/>
+          <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.273743669286953"/>
+         </CompoundPredicate>
+         <ScoreDistribution value="1" recordCount="18" confidence="0.947368421052632"/>
+         <ScoreDistribution value="2" recordCount="1" confidence="0.0526315789473684"/>
+         <ScoreDistribution value="3" recordCount="0" confidence="0"/>
+        </Node>
+        <Node id="103" score="2" recordCount="15">
+         <CompoundPredicate booleanOperator="surrogate">
+          <SimplePredicate field="z_var" operator="lessThan" value="1.109813"/>
+          <SimplePredicate field="y_var" operator="lessThan" value="0.220089525077121"/>
+          <SimplePredicate field="x_var" operator="lessThan" value="0.273743669286953"/>
+         </CompoundPredicate>
+         <ScoreDistribution value="1" recordCount="6" confidence="0.4"/>
+         <ScoreDistribution value="2" recordCount="9" confidence="0.6"/>
+         <ScoreDistribution value="3" recordCount="0" confidence="0"/>
+        </Node>
+       </Node>
+      </Node>
+     </Node>
+     <Node id="13" score="3" recordCount="35" defaultChild="27">
+      <CompoundPredicate booleanOperator="surrogate">
+       <SimplePredicate field="y_var" operator="greaterOrEqual" value="6.698406"/>
+       <SimplePredicate field="x_var" operator="greaterOrEqual" value="14.1679615871693"/>
+      </CompoundPredicate>
+      <ScoreDistribution value="1" recordCount="11" confidence="0.314285714285714"/>
+      <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+      <ScoreDistribution value="3" recordCount="24" confidence="0.685714285714286"/>
+      <Node id="26" score="1" recordCount="15">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="z_var" operator="lessThan" value="3.064092"/>
+        <SimplePredicate field="x_var" operator="lessThan" value="18.8005866875428"/>
+        <SimplePredicate field="y_var" operator="lessThan" value="7.44613349081027"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="1" recordCount="11" confidence="0.733333333333333"/>
+       <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="3" recordCount="4" confidence="0.266666666666667"/>
+      </Node>
+      <Node id="27" score="3" recordCount="20">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="z_var" operator="greaterOrEqual" value="3.064092"/>
+        <SimplePredicate field="x_var" operator="greaterOrEqual" value="18.8005866875428"/>
+        <SimplePredicate field="y_var" operator="greaterOrEqual" value="7.44613349081027"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="1" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="3" recordCount="20" confidence="1"/>
+      </Node>
+     </Node>
+    </Node>
+    <Node id="7" score="3" recordCount="378" defaultChild="14">
+     <CompoundPredicate booleanOperator="surrogate">
+      <SimplePredicate field="z_var" operator="greaterOrEqual" value="5.861938"/>
+      <SimplePredicate field="y_var" operator="greaterOrEqual" value="0.917248761094469"/>
+      <SimplePredicate field="x_var" operator="greaterOrEqual" value="1.10473956664052"/>
+     </CompoundPredicate>
+     <ScoreDistribution value="1" recordCount="29" confidence="0.0767195767195767"/>
+     <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+     <ScoreDistribution value="3" recordCount="349" confidence="0.923280423280423"/>
+     <Node id="14" score="3" recordCount="127" defaultChild="28">
+      <CompoundPredicate booleanOperator="surrogate">
+       <SimplePredicate field="z_var" operator="lessThan" value="18.5142"/>
+       <SimplePredicate field="x_var" operator="greaterOrEqual" value="7.03605091515534"/>
+       <SimplePredicate field="y_var" operator="lessThan" value="0.921466518427026"/>
+      </CompoundPredicate>
+      <ScoreDistribution value="1" recordCount="29" confidence="0.228346456692913"/>
+      <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+      <ScoreDistribution value="3" recordCount="98" confidence="0.771653543307086"/>
+      <Node id="28" score="3" recordCount="72" defaultChild="57">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="y_var" operator="lessThan" value="3.331469"/>
+        <SimplePredicate field="x_var" operator="lessThan" value="5.67667078966783"/>
+        <SimplePredicate field="z_var" operator="lessThan" value="10.9606181138466"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="1" recordCount="27" confidence="0.375"/>
+       <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="3" recordCount="45" confidence="0.625"/>
+       <Node id="56" score="1" recordCount="12">
+        <CompoundPredicate booleanOperator="surrogate">
+         <SimplePredicate field="x_var" operator="greaterOrEqual" value="3.523591"/>
+         <SimplePredicate field="y_var" operator="greaterOrEqual" value="1.79504063143736"/>
+        </CompoundPredicate>
+        <ScoreDistribution value="1" recordCount="11" confidence="0.916666666666667"/>
+        <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+        <ScoreDistribution value="3" recordCount="1" confidence="0.0833333333333333"/>
+       </Node>
+       <Node id="57" score="3" recordCount="60" defaultChild="114">
+        <CompoundPredicate booleanOperator="surrogate">
+         <SimplePredicate field="x_var" operator="lessThan" value="3.523591"/>
+         <SimplePredicate field="y_var" operator="lessThan" value="1.79504063143736"/>
+        </CompoundPredicate>
+        <ScoreDistribution value="1" recordCount="16" confidence="0.266666666666667"/>
+        <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+        <ScoreDistribution value="3" recordCount="44" confidence="0.733333333333333"/>
+        <Node id="114" score="3" recordCount="31" defaultChild="229">
+         <CompoundPredicate booleanOperator="surrogate">
+          <SimplePredicate field="z_var" operator="lessThan" value="8.249737"/>
+          <SimplePredicate field="y_var" operator="lessThan" value="1.15715280445362"/>
+          <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.403511716485275"/>
+         </CompoundPredicate>
+         <ScoreDistribution value="1" recordCount="15" confidence="0.483870967741936"/>
+         <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+         <ScoreDistribution value="3" recordCount="16" confidence="0.516129032258065"/>
+         <Node id="228" score="1" recordCount="21" defaultChild="457">
+          <CompoundPredicate booleanOperator="surrogate">
+           <SimplePredicate field="x_var" operator="lessThan" value="1.421187"/>
+           <SimplePredicate field="y_var" operator="lessThan" value="1.23884611206256"/>
+           <SimplePredicate field="z_var" operator="lessThan" value="7.93947513460192"/>
+          </CompoundPredicate>
+          <ScoreDistribution value="1" recordCount="12" confidence="0.571428571428571"/>
+          <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+          <ScoreDistribution value="3" recordCount="9" confidence="0.428571428571428"/>
+          <Node id="456" score="1" recordCount="14">
+           <CompoundPredicate booleanOperator="surrogate">
+            <SimplePredicate field="x_var" operator="greaterOrEqual" value="0.6175376"/>
+            <SimplePredicate field="z_var" operator="greaterOrEqual" value="6.35605541473242"/>
+           </CompoundPredicate>
+           <ScoreDistribution value="1" recordCount="10" confidence="0.714285714285714"/>
+           <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+           <ScoreDistribution value="3" recordCount="4" confidence="0.285714285714286"/>
+          </Node>
+          <Node id="457" score="3" recordCount="7">
+           <CompoundPredicate booleanOperator="surrogate">
+            <SimplePredicate field="x_var" operator="lessThan" value="0.6175376"/>
+            <SimplePredicate field="z_var" operator="lessThan" value="6.35605541473242"/>
+           </CompoundPredicate>
+           <ScoreDistribution value="1" recordCount="2" confidence="0.285714285714286"/>
+           <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+           <ScoreDistribution value="3" recordCount="5" confidence="0.714285714285714"/>
+          </Node>
+         </Node>
+         <Node id="229" score="3" recordCount="10">
+          <CompoundPredicate booleanOperator="surrogate">
+           <SimplePredicate field="x_var" operator="greaterOrEqual" value="1.421187"/>
+           <SimplePredicate field="y_var" operator="greaterOrEqual" value="1.23884611206256"/>
+           <SimplePredicate field="z_var" operator="greaterOrEqual" value="7.93947513460192"/>
+          </CompoundPredicate>
+          <ScoreDistribution value="1" recordCount="3" confidence="0.3"/>
+          <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+          <ScoreDistribution value="3" recordCount="7" confidence="0.7"/>
+         </Node>
+        </Node>
+        <Node id="115" score="3" recordCount="29">
+         <CompoundPredicate booleanOperator="surrogate">
+          <SimplePredicate field="z_var" operator="greaterOrEqual" value="8.249737"/>
+          <SimplePredicate field="y_var" operator="greaterOrEqual" value="1.15715280445362"/>
+          <SimplePredicate field="x_var" operator="lessThan" value="0.403511716485275"/>
+         </CompoundPredicate>
+         <ScoreDistribution value="1" recordCount="1" confidence="0.0344827586206897"/>
+         <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+         <ScoreDistribution value="3" recordCount="28" confidence="0.96551724137931"/>
+        </Node>
+       </Node>
+      </Node>
+      <Node id="29" score="3" recordCount="55">
+       <CompoundPredicate booleanOperator="surrogate">
+        <SimplePredicate field="y_var" operator="greaterOrEqual" value="3.331469"/>
+        <SimplePredicate field="x_var" operator="greaterOrEqual" value="5.67667078966783"/>
+        <SimplePredicate field="z_var" operator="greaterOrEqual" value="10.9606181138466"/>
+       </CompoundPredicate>
+       <ScoreDistribution value="1" recordCount="2" confidence="0.0363636363636364"/>
+       <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+       <ScoreDistribution value="3" recordCount="53" confidence="0.963636363636364"/>
+      </Node>
+     </Node>
+     <Node id="15" score="3" recordCount="251">
+      <CompoundPredicate booleanOperator="surrogate">
+       <SimplePredicate field="z_var" operator="greaterOrEqual" value="18.5142"/>
+       <SimplePredicate field="x_var" operator="lessThan" value="7.03605091515534"/>
+       <SimplePredicate field="y_var" operator="greaterOrEqual" value="0.921466518427026"/>
+      </CompoundPredicate>
+      <ScoreDistribution value="1" recordCount="0" confidence="0"/>
+      <ScoreDistribution value="2" recordCount="0" confidence="0"/>
+      <ScoreDistribution value="3" recordCount="251" confidence="1"/>
+     </Node>
+    </Node>
+   </Node>
+  </Node>
+ </TreeModel>
+</PMML>

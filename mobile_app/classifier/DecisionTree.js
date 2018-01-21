@@ -65,7 +65,9 @@ DecisionTree.prototype = {
     }
 };
 
-export const decisionTree = new DecisionTree(true, Array(new DecisionTree(function(observation) {
+export const decisionTree = 
+
+/*new DecisionTree(true, Array(new DecisionTree(function(observation) {
     return (observation.z_var < 0.602161 && observation.x_var < 0.167885671703886 && observation.y_var < 0.0925586504692965 && true);
 }, "stehen"), new DecisionTree(function(observation) {
     return (observation.z_var >= 0.602161 && observation.x_var >= 0.167885671703886 && observation.y_var >= 0.0925586504692965 && true);
@@ -73,7 +75,87 @@ export const decisionTree = new DecisionTree(true, Array(new DecisionTree(functi
     return (observation.z_var < 14.66717 && observation.y_var < 1.20187788689765 && observation.x_var < 1.33867843993217 && true);
 }, "gehen"), new DecisionTree(function(observation) {
     return (observation.z_var >= 14.66717 && observation.y_var >= 1.20187788689765 && observation.x_var >= 1.33867843993217 && true);
-}, "treppe")))))
+}, "treppe")))))*/
+
+//LOSO
+/*
+new DecisionTree(true, Array(new DecisionTree(function(observation) {
+    return (observation.y_var < 0.1029296 && observation.z_var < 0.420771528488261 && observation.x_var < 0.168528528874078 && true);
+}, "2"), new DecisionTree(function(observation) {
+    return (observation.y_var >= 0.1029296 && observation.z_var >= 0.420771528488261 && observation.x_var >= 0.168528528874078 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.z_var < 5.861938 && observation.y_var < 0.917248761094469 && observation.x_var < 1.10473956664052 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.y_var < 6.698406 && observation.x_var < 14.1679615871693 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.z_var >= 1.434801 && observation.x_var >= 0.198268295549786 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.x_var >= 1.121318 && observation.y_var >= 1.10993271792992 && observation.z_var >= 5.7587326148684 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.x_var < 1.121318 && observation.y_var < 1.10993271792992 && observation.z_var < 5.7587326148684 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.y_var < 0.3521763 && observation.z_var < 3.12888774693017 && observation.x_var < 0.239459705295495 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.y_var >= 0.3521763 && observation.z_var >= 3.12888774693017 && observation.x_var >= 0.239459705295495 && true);
+}, Array(new DecisionTree(function(observation) {
+    return observation.z_var < 4.689934
+}, Array(new DecisionTree(function(observation) {
+    return (observation.x_var < 0.4355855 && observation.z_var < 2.89359387942982 && observation.y_var < 1.26498605571654 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.x_var >= 0.4355855 && observation.z_var >= 2.89359387942982 && observation.y_var >= 1.26498605571654 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.z_var >= 3.704214 && observation.x_var >= 1.06089123498811 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.z_var < 3.704214 && observation.x_var < 1.06089123498811 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.y_var >= 0.4158848 && observation.x_var >= 0.487767634429584 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.y_var < 0.4158848 && observation.x_var < 0.487767634429584 && true);
+}, "3"))))))), new DecisionTree(function(observation) {
+    return observation.z_var >= 4.689934
+}, "1"))))))), new DecisionTree(function(observation) {
+    return (observation.z_var < 1.434801 && observation.x_var < 0.198268295549786 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.y_var >= 0.3961757 && observation.x_var >= 0.51683237011011 && observation.z_var < 1.18656873288817 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.y_var < 0.3961757 && observation.x_var < 0.51683237011011 && observation.z_var >= 1.18656873288817 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.z_var >= 1.109813 && observation.y_var >= 0.220089525077121 && observation.x_var >= 0.273743669286953 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.z_var < 1.109813 && observation.y_var < 0.220089525077121 && observation.x_var < 0.273743669286953 && true);
+}, "2"))))))), new DecisionTree(function(observation) {
+    return (observation.y_var >= 6.698406 && observation.x_var >= 14.1679615871693 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.z_var < 3.064092 && observation.x_var < 18.8005866875428 && observation.y_var < 7.44613349081027 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.z_var >= 3.064092 && observation.x_var >= 18.8005866875428 && observation.y_var >= 7.44613349081027 && true);
+}, "3"))))), new DecisionTree(function(observation) {
+    return (observation.z_var >= 5.861938 && observation.y_var >= 0.917248761094469 && observation.x_var >= 1.10473956664052 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.z_var < 18.5142 && observation.x_var >= 7.03605091515534 && observation.y_var < 0.921466518427026 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.y_var < 3.331469 && observation.x_var < 5.67667078966783 && observation.z_var < 10.9606181138466 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.x_var >= 3.523591 && observation.y_var >= 1.79504063143736 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.x_var < 3.523591 && observation.y_var < 1.79504063143736 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.z_var < 8.249737 && observation.y_var < 1.15715280445362 && observation.x_var >= 0.403511716485275 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.x_var < 1.421187 && observation.y_var < 1.23884611206256 && observation.z_var < 7.93947513460192 && true);
+}, Array(new DecisionTree(function(observation) {
+    return (observation.x_var >= 0.6175376 && observation.z_var >= 6.35605541473242 && true);
+}, "1"), new DecisionTree(function(observation) {
+    return (observation.x_var < 0.6175376 && observation.z_var < 6.35605541473242 && true);
+}, "3"))), new DecisionTree(function(observation) {
+    return (observation.x_var >= 1.421187 && observation.y_var >= 1.23884611206256 && observation.z_var >= 7.93947513460192 && true);
+}, "3"))), new DecisionTree(function(observation) {
+    return (observation.z_var >= 8.249737 && observation.y_var >= 1.15715280445362 && observation.x_var < 0.403511716485275 && true);
+}, "3"))))), new DecisionTree(function(observation) {
+    return (observation.y_var >= 3.331469 && observation.x_var >= 5.67667078966783 && observation.z_var >= 10.9606181138466 && true);
+}, "3"))), new DecisionTree(function(observation) {
+    return (observation.z_var >= 18.5142 && observation.x_var < 7.03605091515534 && observation.y_var >= 0.921466518427026 && true);
+}, "3")))))))*/
 
 /*new DecisionTree(true, Array(new DecisionTree(function(observation) {
     return (observation.x_sd >= 0.2403076 && observation.y_sd >= 0.322245516841116 && observation.z_sd >= 0.372478104862325 && observation.y_mean >= 0.0243296317842374 && observation.z_mean < -0.0126677122268286 && observation.x_mean < -0.0130249937886088 && true);
