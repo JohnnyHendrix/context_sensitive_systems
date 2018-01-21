@@ -7,34 +7,34 @@ library(zoo)
 library(foreach)
 library(ggvis)
 library(AppliedPredictiveModeling)
+library(dplyr)
 
 ###########################  STEP 1 - DATA PREPROCESSING ###########################
 
-# create influx connection object
+# Create influx connection object
 con <- influxdbr2::influx_connection(host = "138.68.73.47",
                                      port = 8086,
                                      user = "kss",
                                      pass = "kss_ss17")
 
-# select FileScanner values from kss_kay and do not return xts
+# Select FileScanner values from kss_kay and do not return xts
 dataset = influxdbr2::influx_select(con = con,
                                     db = "kss",
                                     value = "*",
                                     from = "kss_riedel",
                                     return_xts = TRUE)
 
-# XTS to data frame
 dataset = data.frame(dataset)
+
 # Peek at the data for good measure
 head(dataset)
+
 # get the dimension of the dataset to check
 dim(dataset)
 
 dataset = dataset[, c(1,2,4,3,5,6,7,8)]
 dataset = dataset[,4:8]
-
-# for future pca computation
-#dataset$context = factor(dataset$context, levels = c('gehen', 'stehen', 'treppe'), labels = c(1,2,3))
+dataset$context = factor(dataset$context, levels = c('gehen', 'stehen', 'treppe'), labels = c(1,2,3))
 
 # Feature Scaling
 #train[,3:5] = scale(train[,3:5], scale = TRUE)
@@ -66,7 +66,7 @@ loso_data
 
 users = c("Johnny")
 w = 20
-users
+
 data=foreach(u=users,.combine=rbind)%:%
   foreach(a=activities,.combine=rbind)%do%
   {
@@ -79,6 +79,7 @@ data=foreach(u=users,.combine=rbind)%:%
     cbind(l,t)
     return(cbind(l,t))
   }
+
 
 # 1: context, var: 3:x, 4:y, 5:z
 dataset = data[,c(1,3,4,5)]
@@ -94,11 +95,20 @@ test = subset(dataset, split == FALSE)
 # write xml
 library(pmml)
 library(rpart)
-head(data)
-rpart_data <- rpart(label ~ ., data=data)
-pmml(rpart_data)
-saveXML(pmml(rpart_data), file = "kss_var.xml")
-dataset
+library("rpart.plot")
+
+# Run algorithms using 10-fold cross validation
+control<-trainControl(method = "cv", number = 10, repeats = 1)
+metric<-"Accuracy"
+
+# Decision Tree
+set.seed(7)
+dtree_fit <- train(context ~., data = train, method = "rpart", parms = list(split = "information"),
+                   trControl=control,
+                   tuneLength = 10)
+
+saveXML(pmml(dtree_fit$finalModel), file = "kss_var.xml")
+rpart.plot(dtree_fit$finalModel)
 ###########################  STEP 3 - CREATE VALIDATION SET ###########################
 
 # Create a list of 80% of the rows in the original dataset we can use for training
