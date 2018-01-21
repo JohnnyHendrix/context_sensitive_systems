@@ -61,13 +61,6 @@ calc_features<- function(data,columns,features,width,by){
 activities = levels(dataset$context)
 sensors = c("x", "y", "z")
 users = unique(dataset$user_id)
-# create leave-one-subject-out data set by ignoring the first user
-random_users_index <- sample(1:length(users), 1)
-random_users_index
-loso_data <- dataset[dataset$user_id != users[1],]
-loso_data
-
-users = unique(loso_data$user_id)
 users
 w = 20
 
@@ -85,16 +78,33 @@ data=foreach(u=users,.combine=rbind)%:%
     return(cbind(l,t))
   }
 
-# 1: context, var: 3:x, 4:y, 5:z
-dataset = data[,c(1,3,4,5)]
+# 1: context, var: 3:x, 4:y, 5:z, 2: user
+dataset_var = data[,c(1,2,3,4,5)]
+
+dataset_var
+# create leave-one-subject-out data set by ignoring the first user
+random_users_index <- sample(1:length(users), 1)
+random_users_index
+loso_train_data <- dataset_var[dataset_var$user_id != users[random_users_index],]
+loso_test_data <- dataset_var[dataset_var$user_id == users[random_users_index],]
+
+loso_users <- unique(loso_train_data$user_id)
+ignored_user <- unique(loso_test_data$user_id)
+loso_users
+ignored_user
+
+loso_train_data <- loso_train_data[,c(1,3,4,5)]
+loso_test_data <- loso_test_data[,c(1,3,4,5)]
+final_data = dataset_var[,c(1,3,4,5)]
+
 
 # Split Data into training set and test set
 library(caTools)
 set.seed(123)
 
-split = sample.split(dataset$context, SplitRatio = 2/3)
-train = subset(dataset, split == TRUE)
-test = subset(dataset, split == FALSE)
+#split = sample.split(dataset$context, SplitRatio = 2/3)
+#train = subset(dataset, split == TRUE)
+#test = subset(dataset, split == FALSE)
 
 # write xml
 library(pmml)
@@ -103,13 +113,27 @@ library("rpart.plot")
 
 # Run algorithms using 10-fold cross validation
 control<-trainControl(method = "cv", number = 10, repeats = 1)
-metric<-"Accuracy"
 
-# Decision Tree
+# Decision Tree: Train and Test (Evaluate with confusionMatrix)
 set.seed(7)
-dtree_fit <- train(context ~., data = train, method = "rpart", parms = list(split = "information"),
+dtree_train_classifier <- train(context ~., data = loso_train_data, method = "rpart", parms = list(split = "information"),
                    trControl=control,
                    tuneLength = 10)
+predictions<-predict(dtree_train_classifier, loso_test_data)
+confusionMatrix(predictions, loso_test_data$context)
 
-saveXML(pmml(dtree_fit$finalModel), file = "kss_var.xml")
-rpart.plot(dtree_fit$finalModel)
+dtree_final_classifier <- train(context ~., data = final_data, method = "rpart", parms = list(split = "information"),
+                         trControl=control,
+                         tuneLength = 10)
+dtree_final_classifier
+predictions<-predict(dtree_final_classifier, loso_test_data)
+confusionMatrix(predictions, loso_test_data$context)
+
+saveXML(pmml(dtree_final_classifier$finalModel), file = "kss_var.xml")
+rpart.plot(dtree_final_classifier$finalModel)
+featurePlot(x = final_data[,2:4], 
+            y = final_data[,1], 
+            plot = "ellipse",
+            ## Add a key at the top
+            auto.key = list(columns = 3))
+
