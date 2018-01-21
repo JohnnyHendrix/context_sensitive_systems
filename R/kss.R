@@ -28,7 +28,7 @@ dataset = data.frame(dataset)
 
 # Peek at the data for good measure
 head(dataset)
-
+dataset$user_id
 # get the dimension of the dataset to check
 dim(dataset)
 
@@ -57,14 +57,18 @@ calc_features<- function(data,columns,features,width,by){
   return(x)  
 }
 
+
 activities = levels(dataset$context)
 sensors = c("x", "y", "z")
 users = unique(dataset$user_id)
 # create leave-one-subject-out data set by ignoring the first user
+random_users_index <- sample(1:length(users), 1)
+random_users_index
 loso_data <- dataset[dataset$user_id != users[1],]
 loso_data
 
-users = c("Johnny")
+users = unique(loso_data$user_id)
+users
 w = 20
 
 data=foreach(u=users,.combine=rbind)%:%
@@ -72,6 +76,7 @@ data=foreach(u=users,.combine=rbind)%:%
   {
     # d = CONTEXT_USER_SET
     d = filter(dataset, context == a & user_id == u)
+    
     t=calc_features(d,sensors,"var",w,w/2)
     # set context and user to the windowed data
     l=data.frame(d[seq(w-1,nrow(d),w/2),"context"],rep(u,length.out=nrow(t)))
@@ -79,7 +84,6 @@ data=foreach(u=users,.combine=rbind)%:%
     cbind(l,t)
     return(cbind(l,t))
   }
-
 
 # 1: context, var: 3:x, 4:y, 5:z
 dataset = data[,c(1,3,4,5)]
