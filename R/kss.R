@@ -23,27 +23,32 @@ dataset = influxdbr2::influx_select(con = con,
                                     from = "kss_riedel",
                                     return_xts = TRUE)
 
+# XTS to data frame
 dataset = data.frame(dataset)
 # Peek at the data for good measure
 head(dataset)
-
 # get the dimension of the dataset to check
 dim(dataset)
 
 dataset = dataset[, c(1,2,4,3,5,6,7,8)]
 dataset = dataset[,4:8]
-dataset$context = factor(dataset$context, levels = c('gehen', 'stehen', 'treppe'), labels = c(1,2,3))
+
+# for future pca computation
+#dataset$context = factor(dataset$context, levels = c('gehen', 'stehen', 'treppe'), labels = c(1,2,3))
 
 # Feature Scaling
 #train[,3:5] = scale(train[,3:5], scale = TRUE)
 #test[,3:5] = scale(test[,3:5], scale = TRUE)
 
-###########################  STEP 2 - SLIDING WINDOW WITH MEAN AND SD ###########################
+###########################  STEP 2 - SLIDING WINDOW WITH VARIANCE ###########################
 
 # Funktion zur Berechnung von Features mit Sliding Window
+# calc_features( [CONTEXT_USER], sensors,"var", windows,window/2)
+#%do% evaluates the expression sequentially, while %dopar% evalutes it in parallel
 calc_features<- function(data,columns,features,width,by){
   x<-foreach(s=columns,.combine=cbind) %:% 
     foreach(f=features,.combine=cbind) %do% 
+    # rollapply (by used only if width = 1 (to calc fun at by-th time))
     {data.frame(rollapply(data=data[,s], width=width, by=by, FUN=get(f), na.rm=TRUE)) }
   # Spaltennamen setzen
   c<-foreach(s=columns,.combine=c) %:% 
@@ -55,22 +60,28 @@ calc_features<- function(data,columns,features,width,by){
 activities = levels(dataset$context)
 sensors = c("x", "y", "z")
 users = unique(dataset$user_id)
+# create leave-one-subject-out data set by ignoring the first user
+loso_data <- dataset[dataset$user_id != users[1],]
+loso_data
+
 users = c("Johnny")
 w = 20
 users
 data=foreach(u=users,.combine=rbind)%:%
   foreach(a=activities,.combine=rbind)%do%
   {
+    # d = CONTEXT_USER_SET
     d = filter(dataset, context == a & user_id == u)
     t=calc_features(d,sensors,"var",w,w/2)
+    # set context and user to the windowed data
     l=data.frame(d[seq(w-1,nrow(d),w/2),"context"],rep(u,length.out=nrow(t)))
     colnames(l) = c("context","user_id")
     cbind(l,t)
     return(cbind(l,t))
-    
   }
-dataset = data
-dataset = dataset[,c(1,3,4,5)]
+
+# 1: context, var: 3:x, 4:y, 5:z
+dataset = data[,c(1,3,4,5)]
 
 # Split Data into training set and test set
 library(caTools)
@@ -80,18 +91,18 @@ split = sample.split(dataset$context, SplitRatio = 2/3)
 train = subset(dataset, split == TRUE)
 test = subset(dataset, split == FALSE)
 
+# write xml
 library(pmml)
 library(rpart)
 head(data)
-my.rpart <- rpart(label ~ ., data=data)
-my.rpart
-pmml(my.rpart)
-saveXML(pmml(my.rpart), file = "kss_var.xml")
+rpart_data <- rpart(label ~ ., data=data)
+pmml(rpart_data)
+saveXML(pmml(rpart_data), file = "kss_var.xml")
 dataset
 ###########################  STEP 3 - CREATE VALIDATION SET ###########################
 
 # Create a list of 80% of the rows in the original dataset we can use for training
-validation_index<-createDataPartition(dataset$context, p =.8, list = FALSE, times = 1)
+#validation_index<-createDataPartition(dataset$context, p =.8, list = FALSE, times = 1)
 
 # Select 20% of the data for validation
 #test<-dataset[-validation_index, ]
